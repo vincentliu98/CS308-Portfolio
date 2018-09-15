@@ -87,15 +87,15 @@ Design Review
 
 * Two pieces of code
     * First: 
-        ```
-            for (int i = 0; i < extraBallPower.size(); i++) {
-                if (extraBallPower != null) {
-                    extraBallPower.get(i).move(elapsedTime);
-                    extraBallPower.get(i).hitPaddle(myPaddleX, SIZE);
-                    extraBallPower.get(i).updatePowerState(thereIsExtraPower, power_time_limit, SECOND_DELAY, TIME_LIMIT);
-                    extraBallPower.get(i).checkHit(thereIsExtraPower, extraBallPower.get(i));
+        ```java
+                for (int i = 0; i < extraBallPower.size(); i++) {
+                    if (extraBallPower != null) {
+                        extraBallPower.get(i).move(elapsedTime);
+                        extraBallPower.get(i).hitPaddle(myPaddleX, SIZE);
+                        extraBallPower.get(i).updatePowerState(thereIsExtraPower, power_time_limit, SECOND_DELAY, TIME_LIMIT);
+                        extraBallPower.get(i).checkHit(thereIsExtraPower, extraBallPower.get(i));
+                    }
                 }
-            }
         ```
      * This code is in the step method within the Main class. Its functions are to move the power-up and check for the collision
         between the power-up and the paddle. If it hits, then it updates the state of the power-up and perform some actions produced
@@ -103,21 +103,21 @@ Design Review
      * This is a relatively good piece of code because it is concise and generalizes the function of the code. The methods for the
         ExtraBallPower class are created within the ExtraBallPower class.
     * Second: 
-        ```
-              public void bouncePaddle() {
+        ```java
+                  public void bouncePaddle() {
                   if (myBouncer.getBoundsInLocal().intersects(context.myPaddle.getBoundsInLocal())) {
-                      context.setRecentlyHit(context.getRecentlyHit());
-                      if (context.getBounceWeird() && myBouncer.getBoundsInLocal().getMinX() < context.myPaddle.getBoundsInLocal().getMinX() + context.myPaddle.getBoundsInLocal().getWidth() / 4) {
-                          myVelocity = new Point2D(-myVelocity.getX(), -myVelocity.getY());
-                      } else if (myBouncer.getBoundsInLocal().getMinX() < context.myPaddle.getBoundsInLocal().getMinX() + context.myPaddle.getBoundsInLocal().getWidth() * 3 / 4) {
-                          myVelocity = new Point2D(myVelocity.getX(), -myVelocity.getY());
-                      } else if (context.getBounceWeird() && myBouncer.getBoundsInLocal().getMinX() < context.myPaddle.getBoundsInLocal().getMinX() + context.myPaddle.getBoundsInLocal().getWidth()) {
-                          myVelocity =new Point2D(-myVelocity.getX(), -myVelocity.getY());
-                      } else if (!context.getBounceWeird() && myBouncer.getBoundsInLocal().getMinX() < context.myPaddle.getBoundsInLocal().getMinX() + context.myPaddle.getBoundsInLocal().getWidth()) {
-                          myVelocity = new Point2D(-myVelocity.getX(), -myVelocity.getY());
+                  context.setRecentlyHit(context.getRecentlyHit());
+                          if (context.getBounceWeird() && myBouncer.getBoundsInLocal().getMinX() < context.myPaddle.getBoundsInLocal().getMinX() + context.myPaddle.getBoundsInLocal().getWidth() / 4) {
+                              myVelocity = new Point2D(-myVelocity.getX(), -myVelocity.getY());
+                          } else if (myBouncer.getBoundsInLocal().getMinX() < context.myPaddle.getBoundsInLocal().getMinX() + context.myPaddle.getBoundsInLocal().getWidth() * 3 / 4) {
+                              myVelocity = new Point2D(myVelocity.getX(), -myVelocity.getY());
+                          } else if (context.getBounceWeird() && myBouncer.getBoundsInLocal().getMinX() < context.myPaddle.getBoundsInLocal().getMinX() + context.myPaddle.getBoundsInLocal().getWidth()) {
+                              myVelocity =new Point2D(-myVelocity.getX(), -myVelocity.getY());
+                          } else if (!context.getBounceWeird() && myBouncer.getBoundsInLocal().getMinX() < context.myPaddle.getBoundsInLocal().getMinX() + context.myPaddle.getBoundsInLocal().getWidth()) {
+                              myVelocity = new Point2D(-myVelocity.getX(), -myVelocity.getY());
+                          }
                       }
                   }
-              }
         ```
      * This piece of code is from the bouncePaddle class from the Bouncer class. It makes the ball bounce off from the
         same route it came from, if it hits the first quarter or the last quarter of the paddle. The ball will bounce normally
@@ -162,15 +162,15 @@ Design Review
 * 2 features
     * Make the power-up's effect disappear in a certain time interval. Inside the ExtraBallPower class
         ```java
-            public void updatePowerState(boolean thereIsPower, double time_limit, double SECOND_DELAY, double TIME_LIMIT) {
-                if (thereIsPower) {
-                    context.setPower_time_limit(time_limit - SECOND_DELAY);
+                public void updatePowerState(boolean thereIsPower, double time_limit, double SECOND_DELAY, double TIME_LIMIT) {
+                    if (thereIsPower) {
+                        context.setPower_time_limit(time_limit - SECOND_DELAY);
+                    }
+                    if (time_limit <= 0) {
+                        context.setThereIsExtraPower(false);
+                        context.setPower_time_limit(TIME_LIMIT);
+                    }
                 }
-                if (time_limit <= 0) {
-                    context.setThereIsExtraPower(false);
-                    context.setPower_time_limit(TIME_LIMIT);
-                }
-            }
         ```
         This piece of code is relatively a good design. When there the paddle has received the power-up, the state thereIsPower
         will be true, and the time limit will decrease gradually. Once the time limit is below 0, I set thereIsPower back to false,
