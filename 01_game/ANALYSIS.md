@@ -87,7 +87,7 @@ Design Review
 
 * Two pieces of code
     * __First__: 
-    ```java
+        ```java
             // move extraballpower power-ups and check for collisions
             for (int i = 0; i < extraBallPower.size(); i++) {
                 if (extraBallPower != null) {
@@ -97,14 +97,14 @@ Design Review
                     extraBallPower.get(i).checkHit(thereIsExtraPower, extraBallPower.get(i));
                 }
             }
-    ```
+        ```
      * This code is in the step method within the Main class. Its functions are to move the power-up and check for the collision
         between the power-up and the paddle. If it hits, then it updates the state of the power-up and perform some actions produced
         by the power-up.
      * This is a relatively good piece of code because it is concise and generalizes the function of the code. The methods for the
         ExtraBallPower class are created within the ExtraBallPower class.
     * __Second__: 
-    ```java
+        ```java
               public void bouncePaddle() {
                   // deal with bouncing off the paddle
                   if (myBouncer.getBoundsInLocal().intersects(context.myPaddle.getBoundsInLocal())) {
@@ -121,7 +121,7 @@ Design Review
                       }
                   }
               }
-    ```
+        ```
      * This piece of code is from the bouncePaddle class from the Bouncer class. It makes the ball bounce off from the
         same route it came from, if it hits the first quarter or the last quarter of the paddle. The ball will bounce normally
         off the paddle when it hits the middle half of the paddle.
