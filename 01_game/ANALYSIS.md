@@ -86,7 +86,7 @@ Design Review
 * The constants are made public and can be accessed using the context from the main class. Other variables are made private. Getters and setters are constructed in the class for other classes to access them.
 
 * Two pieces of code
-    * __First__: 
+    * First: 
         ```java
             for (int i = 0; i < extraBallPower.size(); i++) {
                 if (extraBallPower != null) {
@@ -102,7 +102,7 @@ Design Review
         by the power-up.
      * This is a relatively good piece of code because it is concise and generalizes the function of the code. The methods for the
         ExtraBallPower class are created within the ExtraBallPower class.
-    * __Second__: 
+    * Second: 
         ```java
               public void bouncePaddle() {
                   if (myBouncer.getBoundsInLocal().intersects(context.myPaddle.getBoundsInLocal())) {
@@ -175,7 +175,7 @@ Design Review
         This piece of code is relatively a good design. When there the paddle has received the power-up, the state thereIsPower
         will be true, and the time limit will decrease gradually. Once the time limit is below 0, I set thereIsPower back to false,
         and restore the time limit to wait for the next power-up.
-     * A welcome page
+    * A welcome page
         ```java
                public void start(Stage stage) {
                    myScene = setupGame(SIZE, SIZE, BACKGROUND);
