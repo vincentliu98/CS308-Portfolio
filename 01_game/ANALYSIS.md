@@ -87,6 +87,7 @@ Design Review
 
 * Two pieces of code
     * First: 
+    
         ```java
                 for (int i = 0; i < extraBallPower.size(); i++) {
                     if (extraBallPower != null) {
@@ -97,6 +98,7 @@ Design Review
                     }
                 }
         ```
+        
      * This code is in the step method within the Main class. Its functions are to move the power-up and check for the collision
         between the power-up and the paddle. If it hits, then it updates the state of the power-up and perform some actions produced
         by the power-up.
@@ -161,6 +163,7 @@ Design Review
 
 * 2 features
     * Make the power-up's effect disappear in a certain time interval. Inside the ExtraBallPower class
+    
         ```java
                 public void updatePowerState(boolean thereIsPower, double time_limit, double SECOND_DELAY, double TIME_LIMIT) {
                     if (thereIsPower) {
@@ -172,10 +175,12 @@ Design Review
                     }
                 }
         ```
+        
         This piece of code is relatively a good design. When there the paddle has received the power-up, the state thereIsPower
         will be true, and the time limit will decrease gradually. Once the time limit is below 0, I set thereIsPower back to false,
         and restore the time limit to wait for the next power-up.
     * A welcome page
+    
         ```java
                public void start(Stage stage) {
                    myScene = setupGame(SIZE, SIZE, BACKGROUND);
@@ -194,6 +199,7 @@ Design Review
            
                }
         ```
+        
         This piece of code is from the Welcome class. It is well designed in that this page is always shown first to the
         player. Once the player presses the "Enter" key, the game will start. In this case, the user interface is more user-friendly.
         
