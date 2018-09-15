@@ -87,7 +87,7 @@ Design Review
 
 * Two pieces of code
     * First: 
-        ```java
+        ```
             for (int i = 0; i < extraBallPower.size(); i++) {
                 if (extraBallPower != null) {
                     extraBallPower.get(i).move(elapsedTime);
@@ -103,7 +103,7 @@ Design Review
      * This is a relatively good piece of code because it is concise and generalizes the function of the code. The methods for the
         ExtraBallPower class are created within the ExtraBallPower class.
     * Second: 
-        ```java
+        ```
               public void bouncePaddle() {
                   if (myBouncer.getBoundsInLocal().intersects(context.myPaddle.getBoundsInLocal())) {
                       context.setRecentlyHit(context.getRecentlyHit());
