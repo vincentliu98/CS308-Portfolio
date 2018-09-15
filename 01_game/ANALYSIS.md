@@ -86,28 +86,143 @@ Design Review
 * The constants are made public and can be accessed using the context from the main class. Other variables are made private. Getters and setters are constructed in the class for other classes to access them.
 
 * Two pieces of code
-    * First: 
-    * Second: 
-
+    * __First__: 
+    ```java
+            // move extraballpower power-ups and check for collisions
+            for (int i = 0; i < extraBallPower.size(); i++) {
+                if (extraBallPower != null) {
+                    extraBallPower.get(i).move(elapsedTime);
+                    extraBallPower.get(i).hitPaddle(myPaddleX, SIZE);
+                    extraBallPower.get(i).updatePowerState(thereIsExtraPower, power_time_limit, SECOND_DELAY, TIME_LIMIT);
+                    extraBallPower.get(i).checkHit(thereIsExtraPower, extraBallPower.get(i));
+                }
+            }
+    ```
+     * This code is in the step method within the Main class. Its functions are to move the power-up and check for the collision
+        between the power-up and the paddle. If it hits, then it updates the state of the power-up and perform some actions produced
+        by the power-up.
+     * This is a relatively good piece of code because it is concise and generalizes the function of the code. The methods for the
+        ExtraBallPower class are created within the ExtraBallPower class.
+    * __Second__: 
+    ```java
+              public void bouncePaddle() {
+                  // deal with bouncing off the paddle
+                  if (myBouncer.getBoundsInLocal().intersects(context.myPaddle.getBoundsInLocal())) {
+                      context.setRecentlyHit(context.getRecentlyHit());
+                      // make the ball bounce normally in the middle, and bounce back to its original route
+                      if (context.getBounceWeird() && myBouncer.getBoundsInLocal().getMinX() < context.myPaddle.getBoundsInLocal().getMinX() + context.myPaddle.getBoundsInLocal().getWidth() / 4) {
+                          myVelocity = new Point2D(-myVelocity.getX(), -myVelocity.getY());
+                      } else if (myBouncer.getBoundsInLocal().getMinX() < context.myPaddle.getBoundsInLocal().getMinX() + context.myPaddle.getBoundsInLocal().getWidth() * 3 / 4) {
+                          myVelocity = new Point2D(myVelocity.getX(), -myVelocity.getY());
+                      } else if (context.getBounceWeird() && myBouncer.getBoundsInLocal().getMinX() < context.myPaddle.getBoundsInLocal().getMinX() + context.myPaddle.getBoundsInLocal().getWidth()) {
+                          myVelocity =new Point2D(-myVelocity.getX(), -myVelocity.getY());
+                      } else if (!context.getBounceWeird() && myBouncer.getBoundsInLocal().getMinX() < context.myPaddle.getBoundsInLocal().getMinX() + context.myPaddle.getBoundsInLocal().getWidth()) {
+                          myVelocity = new Point2D(-myVelocity.getX(), -myVelocity.getY());
+                      }
+                  }
+              }
+    ```
+     * This piece of code is from the bouncePaddle class from the Bouncer class. It makes the ball bounce off from the
+        same route it came from, if it hits the first quarter or the last quarter of the paddle. The ball will bounce normally
+        off the paddle when it hits the middle half of the paddle.
+     * This code is relatively a bad design. Firstly, there are so many variable names that make it hard to read. Secondly,
+        when the speed is changed, it will be easier to create method such as "reverseX" and "reverseY" to shorten the code.
+        
 ### Design
 
-You can put blocks of code in here like this:
-```java
-    /**
-     * Returns sum of all values in given list.
-     */
-    public int getTotal (Collection<Integer> data) {
-        int total = 0;
-        for (int d : data) {
-            total += d;
-        }
-        return total;
-    }
-```
+* High level design
+   * The program consists of 8 classes in total. 
+   * Welcome.java is the welcome page that displays when the program starts, and it triggers the Main.java to run when the user presses the "Enter" key. 
+   * The Main class creates the animation and controls the interaction between the bouncer, the bricks, the paddle, and the power-ups. 
+   * The bouncer has its own class named Bouncer.java, which deals with the bouncer's the movement and collision with the wall
+   * There are 3 types of power-ups: ExtraBallPower, PointsPower, and SizePower. These three power-ups all have their own class and inherits the PowerUp class. The PowerUp class 
+    handles the movement of the power-ups and the collision with the paddle
+   * The Texts class contains the winning and losing text when the game reaches a certain stage
 
+* How to add new features
+    * Add different levels with different layout of bricks
+        * Create a new .txt file in the resources folder. Write digits from 1-4
+        * Import the file as a string in the global field
+        * Depending on the number of columns in your design, consider changing BRICK_COLUMN in the Main class's field
+        * Change the switch(current_level) statement in the setUpGame method
+    * Add a different power-up
+        * Create a class that extends PowerUp.java
+        * Depending on the effect of your method, you might want to override the hitPaddle method. This method deals with
+        what would happen when the power-up hits the paddle
+        * Import the image as a string in the global field of Main class
+        * Initiate an array of your power-up in the setUpGame class
+        * In the for loop within the step method, create an instance of your power-up and specify the effect
+
+* Assumptions/Decisions to simplify or resolve ambiguities in the project's functionality
+    * At first I tried to use the .gif files from the resources folder to create bricks. However, I was not familiar with
+    the coordinates for ImageViews, and I had trouble making the bouncer bounce correctly from the brick. Thus, I chose rectangles
+    to construct bricks in the end.
+    * When the brick is supposed to disappear, I first set the width and the
+    height to 0, but the bouncer still bounces around that region where the brick existed previously. Therefore, in order to
+    remove the bricks, I chose to set the X and Y to a negative value additionally. In this way, it resolves the conflict, but
+    there must be better implementations.
+
+* 2 features
+    * Make the power-up's effect disappear in a certain time interval. Inside the ExtraBallPower class
+        ```java
+            public void updatePowerState(boolean thereIsPower, double time_limit, double SECOND_DELAY, double TIME_LIMIT) {
+                if (thereIsPower) {
+                    context.setPower_time_limit(time_limit - SECOND_DELAY);
+                }
+                if (time_limit <= 0) {
+                    context.setThereIsExtraPower(false);
+                    context.setPower_time_limit(TIME_LIMIT);
+                }
+            }
+        ```
+        This piece of code is relatively a good design. When there the paddle has received the power-up, the state thereIsPower
+        will be true, and the time limit will decrease gradually. Once the time limit is below 0, I set thereIsPower back to false,
+        and restore the time limit to wait for the next power-up.
+     * A welcome page
+        ```java
+               public void start(Stage stage) {
+                   myScene = setupGame(SIZE, SIZE, BACKGROUND);
+           
+                   stage.setScene(myScene);
+                   stage.setTitle(TITLE);
+                   stage.show();
+           
+                   stage.getScene().setOnKeyPressed(
+                           event -> {
+                               if (event.getCode() == KeyCode.ENTER) {
+                                   new Main().start(stage);
+                               }
+                           }
+                   );
+           
+               }
+        ```
+        This piece of code is from the Welcome class. It is well designed in that this page is always shown first to the
+        player. Once the player presses the "Enter" key, the game will start. In this case, the user interface is more user-friendly.
+        
 ### Alternate Designs
 
-Here is another way to look at my design:
+* Describe two design decisions you made, or wish you had done differently, in detail:
+    1. First Alternate Design:
+        * _Alternative Approach_: create 3 different brick classes, each type of brick having the field named brickLife, instead of using an arrayList to keep
+        track the life of bricks.
+        * _Trade-offs_: I used Scanner to read the digits from .txt files and understand the layout
+                            of different bricks. In order to add or modify the layout, one must be familiar with the convention that I use, which is a con
+                            for this design. For instance, the digit 4 in the .txt file means it will create a brick that goes away after 3 hits, and the
+                            digit 1 in the .txt file means there is no brick. This design might be confusing for people who see my code for the first time.
+        * _Preference_: I would prefer having separate classes for bricks. This make the code easier for others to read.
+    2. Second Alternate Design:
+        * _Alternative Approach_: Create a separate class for the paddle so that it does not cram up in the Main class.
+        * _Trade-offs_: I created the paddle directly inside the Main class rather than creating a separate class for it. When dealing with the
+                            collision with the paddle, I simply used the context from Main class to get the paddle.
+        * _Preference_: For this project, I would prefer having separate classes for the paddle, because it is easy to deal with,
+        and I don't need to pass the private variables across classes, which makes it convenient. If the application is larger,
+        I would create a separate class for the paddle.
 
-![This is cool, too bad you can't see it](crc-example.png "An alternate design")
+What are the trade-offs of the design choice (describe the pros and cons of the different designs)?
+Which would you prefer and why (it does not have to be the one that is currently implemented)?
 
+What are the three most important bugs that remain in the project's design or implementation?
+1. The bouncer bounces off the bricks abnormally sometimes due to the boundary settings in the bouncer class
+2. The bouncer will oscillate on the top of the screen if the player uses the cheat key to jump to a certain level
+3. When the player loses, the text for losing does not show up. Instead, a black rectangle shows up
